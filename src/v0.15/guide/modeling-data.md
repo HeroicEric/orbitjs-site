@@ -199,6 +199,8 @@ When working with remote servers that do not support client-generated IDs, it's
 necessary to correlate locally generated IDs with remotely generated IDs, or
 "keys". Like `id`, keys uniquely identify a record of a particular model type.
 
+^^ I'm not sure what the "or keys" part of this means
+
 Keys currently accept no _standard_ options, so they should be declared with an
 empty options hash as follows:
 
@@ -243,6 +245,8 @@ const schema = new Schema({
   }
 });
 
+# some other examples are using const for the same thing
+# maybe decide on one to be consistent?
 let earth = {
   type: 'planet',
   attributes: {

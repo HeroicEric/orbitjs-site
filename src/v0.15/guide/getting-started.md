@@ -48,6 +48,8 @@ a planet can have many moons. By setting an `inverse` for each relationship,
 we're telling Orbit that changes to one side of the relationship should be
 reflected in the other.
 
+Is setting the inverse required?
+
 ## Defining a source
 
 Sources provide interfaces to access data. To ensure that they have the same
@@ -104,10 +106,10 @@ store.update(t => [
   t.addRecord(theMoon)
 ])
   .then(() => store.query(q => q.findRecords('planet').sort('name')))
-  .then(planets => {
-    console.log(planets);
-  });
+  .then(planets => console.log(planets));
 ```
+
+^^ Seems more consistent to use the one-liner for both
 
 The following output should be logged:
 
@@ -157,6 +159,8 @@ Note that we added the relationship between the moon and the planet on just the
 moon record. However, when we query the planet, we can see that the inverse
 relationship has also been added. This is because every operation that's applied
 to the store's cache passes through a schema consistency check.
+
+^^ what is a "schema consistency check"?
 
 Let's look at how the store is queried:
 
@@ -221,6 +225,9 @@ const backup = new IndexedDBSource({
   namespace: 'solarsystem'
 });
 ```
+
+^^ Why do we need to define `name` and `namespace` this time? We didn't do this
+when defining the in-memory store.
 
 ## Sync'ing changes between sources
 
@@ -291,6 +298,8 @@ coordinator.activate(); // returns a promise that resolves when all strategies
                         // have been activated
 ```
 
+^^ what does `blocking` do?
+
 Although this might seem like an unnecessary amount of complexity compared with
 the simple event handler, there are a number of benefits to using a coordinator:
 
@@ -326,6 +335,9 @@ with the main store _before_ activating the coordinator. In this way, the
 coordination strategy that backs up the store won't be enabled until after
 the restore is complete.
 
+^^ Why do I care about not enabling the coordination until after the restore is
+complete?
+
 We now have an application which has data fully contained in the browser. Any
 data that's entered can be accessed while offline and will even persist across
 browser refreshes.
@@ -338,7 +350,7 @@ See [Part 2 of this example in CodeSandbox](https://codesandbox.io/s/rr0lkz3rxq?
 
 ## Communicating with a server
 
-Most apps can't exist in the vacuum of a browser - data tends to be far more
+Most apps can't exist in the vacuum of a browser—data tends to be far more
 useful when it's shared with a server.
 
 Let's say that we have a web server that conforms with the
@@ -356,6 +368,8 @@ const remote = new JSONAPISource({
   host: 'http://api.example.com'
 });
 ```
+
+^^ what is the significance of the `name` here?
 
 Next let's add the source to the coordinator:
 
@@ -400,7 +414,7 @@ coordinator.addStrategy(new SyncStrategy({
 ```
 
 These strategies are all non-blocking, which means that the store will be
-updated / queried optimistically without waiting for responses from the server.
+updated/queried optimistically without waiting for responses from the server.
 Once the server responses are received, they will then be sync'd back with the
 store.
 
@@ -411,7 +425,7 @@ network errors (e.g. retry after X secs) as well as other types of exceptions.
 Optimistic server requests paired with an in-browser backup can work well for
 some kinds of applications. For other applications, it's more appropriate to use
 blocking strategies that tie the success of store requests to a successful
-round trip to the server. Still other applications might choose to mix
+round trip to the server. Still, other applications might choose to mix
 strategies, so that only certain updates are blocking (e.g. a store purchase).
 
 Orbit allows for filtering, exception handling, and more in strategies to
@@ -424,6 +438,9 @@ At any given time, our Orbit application may have different kinds of state
 in-flight and unpersisted. This state may include tasks that are queued for
 processing, logs of transforms that have been applied, or other source-specific
 state that we'd like to reify if our application was closed unexpectedly.
+
+^^ what is the distinction between in-flight and unpersisted state? Maybe an
+example?
 
 In order to persist this state, we can create a "bucket" that can be shared
 among our sources:

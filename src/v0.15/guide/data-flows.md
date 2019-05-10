@@ -20,6 +20,8 @@ Orbit divides the movement of data into two different "flows":
 * **Sync flow** - Mutations then flow back downstream and are synchronized
   with all the sources that are concerned.
 
+^^ this needs a fancy diagram :p
+
 Every source interface has events and methods that correspond with one of these
 flows:
 
@@ -68,8 +70,13 @@ As an alternative, we can use a "blocking" strategy in our event listener by
 simply returning a promise:
 
 ```javascript
-store.on('beforeUpdate', transform => remote.push(transform));
+store.on('beforeUpdate', transform => {
+  return remote.push(transform)
+});
 ```
+
+^^ I understand that this was already returning a promise but I think it would
+be more clear to use an explicit return like this
 
 This will prevent the `store` from updating before the transform has been pushed
 up to the `remote` source. An error in `remote.push` will cause `store.update`

@@ -146,6 +146,9 @@ interface with a given method `x`, the following events will be emitted:
 `beforeX`, `x`, and `xFail`. For example, updatable sources have an `update`
 method and can emit `beforeUpdate`, `update`, and `updateFail` events.
 
+^^ not docs related but feels weird that this is not `updateFailed` like is
+conventional in things like CQRS
+
 In addition, any mutations caused by calling `x` will also be emitted with the
 general `transform` event.
 

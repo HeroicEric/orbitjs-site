@@ -78,6 +78,8 @@ queue.push({
 Depending upon whether a queue is set to `autoProcess`, task processing will
 start either immediately or after the `process` method has been called.
 
+^^ what is this `process` method??
+
 Queues emit the following events when processing tasks:
 
 * `change` - whenever a task has been added or removed to a queue
